@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bookers2</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand p-1 text-white" href="/">Bookers</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+
+              <% if user_signed_in? %>
+              <!--サインインしている時↓　Home Users Books logout-->
+              <!--Home ユーザーページ-->
+                <li class="nav-item">
+                  <%= link_to user_path(current_user.id), class: 'nav-link text-light' do %>
+                  <i class="fas fa-home"></i>Home
+                  <% end %>
+                </li>
+                <!--Users ユーザー一覧-->
+                <li class="nav-item">
+                  <%= link_to users_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-users"></i>Users
+                  <% end %>
+                </li>
+                <!--Books 投稿一覧-->
+                <li class="nav-item">
+                  <%= link_to books_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-book-open"></i>Books
+                  <% end %>
+                </li>
+                <!--logout ログアウト-->
+                <li class="nav-item">
+                  <%= link_to destroy_user_session_path, method: :delete, class: 'nav-link text-light' do %>
+                  <i class="fas fa-sign-out-alt"></i>logout
+                  <% end %>
+                </li>
+
+              <% else %>
+              <!--サインインしていない時↓ Home About signup login-->
+                <!--Home　トップページ　homes#top(root_path)-->
+                <li class="nav-item">
+                  <%= link_to root_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-home"></i>Home
+                  <% end %>
+                </li>
+                <!--About　WELCOME!!!!!!!!!!-->
+                <li class="nav-item">
+                  <%= link_to "/home/about", class: 'nav-link text-light' do %>
+                   <i class="fas fa-link"></i>About
+                  <% end %>
+                </li>
+                <!--sign up 新規登録-->
+                <li class="nav-item">
+                  <%= link_to new_user_registration_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-user-plus"></i>sign up
+                  <% end %>
+                </li>
+                <!--login ログイン-->
+                <li class="nav-item">
+                  <%= link_to new_user_session_path, class: 'nav-link text-light' do %>
+                  <i class="fas fa-sign-in-alt"></i>login
+                  <% end %>
+                </li>
+              <% end %>
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="mt-4">
+      <div class="container">
+        <id class="notice"><%= flash[:notice] %></id>
+        <div class="row">
+          <%= yield %>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="mx-auto">
+            <p>CopyRight Infratop.inc</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

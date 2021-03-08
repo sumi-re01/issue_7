@@ -1,0 +1,15 @@
+<!--エラーメッセージ-->
+<% if model.errors.any? %>
+  <div id="error-box">
+    <h3>
+      <%= pluralize(model.errors.count, "error") %> prohibited this book from being saved:
+    </h3>
+    <div id="error-messages">
+      <ul>
+        <% model.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

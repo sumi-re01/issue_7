@@ -1,0 +1,84 @@
+<!--Books show. ※Book.new => @booka-->
+<div class="container px-5 px-sm-0">
+  <div class="row">
+    <!--User info, New book-->
+    <div class="col-md-3">
+      <%= render partial: 'books/user', locals: {user: @user, book: @book_new} %>
+    </div>
+
+    <!--Book詳細-->
+    <div class="col-md-8 offset-md-1">
+      <h2>Book detail</h2>
+      <table class="table table-hover table-inverse">
+        <tbody>
+          <tr>
+            <td>
+              <%= link_to user_path(@book.user.id) do %>
+                <%= attachment_image_tag @book.user, :profile_image, size: "40x40", fallback: "no_image.jpg" %><br />
+                <%= @book.user.name %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to book_path(@book) do %>
+                <%= @book.title %>
+              <% end %>
+            </td>
+            <td><%= @book.body %></td>
+            <td>
+              <% if @book.favorited_by?(current_user) %>
+                <%= link_to book_favorites_path(@book), method: :delete do %>
+                  <font color="red">♥<%= @book.favorites.count %></font>
+                <% end %>
+              <% else %>
+                <%= link_to book_favorites_path(@book), method: :post do %>
+                  ♥<%= @book.favorites.count %>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              コメント数：<%= @book.book_comments.count %>
+            </td>
+            <!--作成ユーザなら表示↓-->
+            <% if @book.user == current_user %>
+            <td><%= link_to "Edit", edit_book_path(@book), class: 'btn btn-success' %></td>
+            <td><%= link_to "Destroy", book_path(@book.id), class:'btn btn-danger', method: :delete, data: {confirm: "「#{@book.title}」を削除します。"} %></td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="row">
+        <table class="table table-hover table-inverse">
+          <tbody>
+            <% @book.book_comments.each do |comment| %>
+            <tr>
+              <td>
+                <%= link_to user_path(comment.user.id) do %>
+                  <%= attachment_image_tag comment.user, :profile_image, size: "40x40", fallback: "no_image.jpg" %><br />
+                  <%= comment.user.name %>
+                <% end %>
+              </td>
+              <td><%= comment.comment %></td>
+              <!--投稿ユーザなら表示↓-->
+              <% if comment.user == current_user %>
+              <td><%= link_to "Destroy", book_book_comment_path(comment.book, comment), class:'btn btn-danger', method: :delete %></td>
+              <% else %>
+              <td></td>
+              <% end %>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="row">
+        <!--@bookで/books/:book_id/book_commentsの:book_idを取得するのさ〜〜！！-->
+        <%= form_with model: @book_comment, url: book_book_comments_path(@book), local:true do |f| %>
+          <div class="comment_form">
+            <%= f.text_area :comment %>
+            <%= f.submit "送信" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
